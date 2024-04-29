@@ -32,7 +32,4 @@ public class SwaggerConfig {
                 //.apis(RequestHandlerSelectors.any())
                 .build();
     }
-
-
-
 }

@@ -2,6 +2,7 @@ package com.third.zhgd.User.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.third.zhgd.User.dto.UserLoginDto;
 import com.third.zhgd.User.entity.User;
 
 import java.util.List;
@@ -15,6 +16,12 @@ import java.util.List;
 * @since 2024-04-21
 */
 public interface UserService extends IService<User> {
+
+    User login(UserLoginDto userLoginDto) throws Exception;
+
+    void register(User user) throws Exception;
+
+    boolean exit(String username);
 
 
     Boolean addOrUpdate(User user);

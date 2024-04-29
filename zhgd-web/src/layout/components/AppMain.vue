@@ -1,7 +1,7 @@
 <template>
     <section class="app-main">
         页面渲染
-          <router-view/>
+        <router-view/>
     </section>
   </template>
   

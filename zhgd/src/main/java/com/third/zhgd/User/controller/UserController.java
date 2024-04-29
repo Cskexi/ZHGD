@@ -1,5 +1,8 @@
 package com.third.zhgd.User.controller;
 
+import com.third.zhgd.User.dto.UserLoginDto;
+import com.third.zhgd.other.utils.JwtUtil;
+import com.third.zhgd.other.utils.MD5Util;
 import com.third.zhgd.other.utils.Result;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -28,6 +31,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @Autowired
     private UserService userService;
+
+
+
+    @RequestMapping(method = RequestMethod.POST,value="/login")
+    @ApiOperation(value = "用户登录接口")
+    public Result login(@RequestBody UserLoginDto userLoginDto) throws Exception {
+        Result result = new Result();
+        User userExit  = userService.login(userLoginDto);
+        if(userExit!=null){
+            if(userExit.getPassword().equals(MD5Util.getEncode(userLoginDto.getPassword(),userExit.getSalt()))){
+                result.success("登录成功");
+                String token = JwtUtil.generateToken(userExit.getId());
+                result.setData(token);
+            }else {
+                result.fail("密码不正确");
+            }
+        }else{
+            result.fail("用户名不存在");
+        }
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.POST,value="/register")
+    @ApiOperation(value = "用户登录接口")
+    public Result register(@RequestBody User user) throws Exception {
+        Result result = new Result();
+        if(userService.exit(user.getUsername())){
+            result.fail("用户名"+user.getUsername()+"已存在");
+            return result;
+        }
+        userService.register(user);
+        result.success("注册成功");
+        return result;
+    }
 
     @ApiOperation(value = "保存修改User信息")
     @RequestMapping(method = RequestMethod.POST, value = "/save")

@@ -1,6 +1,6 @@
 import axios from "axios"
 import qs from "qs"
-import { getStore } from "../utils/auth";
+import { getStore } from "@/utils/storage";
 axios.defaults.baseURL="/api";
 
 axios.interceptors.response.use(res=>{

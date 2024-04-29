@@ -2,6 +2,7 @@
 // module.exports = defineConfig({
 //   transpileDependencies: true
 // })
+
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   devServer: {
@@ -16,7 +17,7 @@ module.exports = defineConfig({
     devServer: {
       open: true, // 启动服务后是否打开浏览器
       host: 'localhost',
-      port: 8090, // 服务端口
+      port: 8080, // 服务端口
       https: false,
       hot: "only",
       //api/book/save->
