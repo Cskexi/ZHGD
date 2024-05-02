@@ -1,5 +1,9 @@
 import{postJson,post} from "@/api/axios"
 
+export function update(params){
+    return postJson('User/update',params)
+}
+
 
 export function userAdd(params){
     return post('User/add',params)

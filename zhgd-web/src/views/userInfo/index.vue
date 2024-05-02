@@ -2,25 +2,26 @@
     <div class="store-management">
       <h1>个人信息管理</h1>
       <p>账号：{{ user.account }}</p>
-      <p>姓名:</p><el-input v-model="this.user.name" placeholder="请输入内容"></el-input>
-      <p>性别</p>   
-      <el-select  v-model="this.user.sexName">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-        </el-select>
-      <p>手机号</p><el-input v-model="this.user.telephone" placeholder="请输入内容"></el-input>
+      <p>姓名：{{user.name}}</p>
+      <p>性别：{{ user.sexName }}</p>   
+      <p>手机号：{{user.telephone  }}</p>
       <p>身份：{{ user.typeName }}</p>
-      <p>密码修改</p>
-  <el-button type="primary">提交</el-button>
+  <el-button type="primary" @click="edit">修改</el-button>
+  <addOrEdit v-if="visible" :defaultFormDate="obj" :title="title" :visible="visible" @close="closeFather"></addOrEdit>
     </div>
   </template>
     
   <script>
-  import { getByToken } from "@/api/modules/user"
+  import { getByToken,update } from "@/api/modules/user"
   import { getStore } from "@/utils/storage"
+  import addOrEdit from "./AddOrEdit"
   export default {
+    components: { addOrEdit },
     data() {
       return {
+        visible: false,
+      obj: {},
+      title: "修改",
         user: {
         id: '',
         account: '',
@@ -29,21 +30,25 @@
         sex: '',
         password: '',
       },
-      options: [{
-        value: 1,
-        label: '男'
-      }, {
-        value: 0,
-        label: '女'
-      },],
       }
     },
     mounted() {
-        // let token = getStore("token")
-        // console.log(token)
         this.loadUserData()
+        
     },
     methods: {
+    edit() {
+      this.obj = this.user;
+      this.title = "编辑个人信息"
+      this.visible = true;
+    },
+    closeFather(val) {
+      this.visible = false
+      if (val) {
+        this.loadUserData()
+      }
+    },
+
     loadUserData() {
       let token = getStore("token")
       if (token) {

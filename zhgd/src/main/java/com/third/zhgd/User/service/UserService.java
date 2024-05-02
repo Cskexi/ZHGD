@@ -27,6 +27,7 @@ public interface UserService extends IService<User> {
 
 
     Boolean addOrUpdate(User user);
+
     void deleteByIds(String ids);
     List<User> list();
     Page<User> page(Integer pageNum,Integer pageSize,String name);
