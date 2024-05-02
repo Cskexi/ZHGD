@@ -21,12 +21,14 @@ public interface UserService extends IService<User> {
 
     void register(User user) throws Exception;
 
-    boolean exit(String username);
+    void add(Integer num) throws Exception;
+
+    boolean exit(String account);
 
 
     Boolean addOrUpdate(User user);
     void deleteByIds(String ids);
     List<User> list();
-    Page<User> page(Integer pageNum,Integer pageSize);
+    Page<User> page(Integer pageNum,Integer pageSize,String name);
 
 }

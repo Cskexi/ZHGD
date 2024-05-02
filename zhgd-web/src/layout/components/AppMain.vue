@@ -1,6 +1,5 @@
 <template>
     <section class="app-main">
-        页面渲染
         <router-view/>
     </section>
   </template>

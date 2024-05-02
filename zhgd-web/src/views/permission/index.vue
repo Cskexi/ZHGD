@@ -1,342 +1,245 @@
 <template>
-    <div>
-      <div style="margin-bottom: 5px;">
-        <el-input v-model="name" placeholder="请输入名字" suffix-icon="el-icon-search" style="width: 200px;"
-                  @keyup.enter.native="loadPost"></el-input>
-        <el-select v-model="sex" filterable placeholder="请选择性别" style="margin-left: 5px;"
-                   @keyup.enter.native="loadPost">
-          <el-option
-              v-for="item in sexs"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-          </el-option>
-        </el-select>
-        <el-button type="primary" style="margin-left: 5px;" @click="loadPost">查询</el-button>
-        <el-button type="success" @click="resetParam">重置</el-button>
-        <el-button type="primary" style="margin-left: 5px;" @click="add">新增</el-button>
-      </div>
-      <el-table :data="tableData"
-                :header-cell-style="{ background: '#f2f5fc', color: '#555555' }"
->
-        <el-table-column prop="name" label="姓名" width="180">
-        </el-table-column>
-        <el-table-column prop="age" label="年龄" width="80">
-        </el-table-column>
-        <el-table-column prop="sex" label="性别" width="80">
-        </el-table-column>
-        <el-table-column prop="phone" label="电话" width="180">
-        </el-table-column>
-        <el-table-column prop="mail" label="邮箱" width="200">
-        </el-table-column>
-        <el-table-column prop="section" label="部门" width="80">
-        </el-table-column>
-        <el-table-column prop="time" label="创建时间" width="200">
-        </el-table-column>
-        <el-table-column prop="operate" label="操作">
-          <template slot-scope="scope">
-            <el-button size="small" type="success" @click="mod(scope.row)">编辑</el-button>
-            <el-button slot="reference" size="small" type="danger">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pageNum"
-          :page-sizes="[5, 10, 20, 30]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
+  <div>
+    <!-- <h1 class="page-title">用户管理</h1> -->
+    <el-form ref="searchForm" :model="searchForm" :inline="true" class="formItem" label-width="80px">
+      <el-col :xl="6" :md="8" :sm="24">
+        <el-input placeholder="姓名" v-model="searchForm.name" clearable> </el-input>
+      </el-col>
+      <el-col :xl="6 || 24" :md="8 || 24" :sm="24">
+      <el-button icon="el-icon-search" type="primary" @click="search">搜索</el-button>
+      <el-button type="primary" @click="delAll">批量删除</el-button>
+    </el-col>
+    <el-col :xl="3 || 24" :md="4 || 24" :sm="24">
+      <el-input-number v-model="num" controls-position="right" :min="1" :max="100"></el-input-number>
+    </el-col>
+    <el-col :xl="4 || 24" :md="4 || 24" :sm="24">
+      <el-button type="primary" @click="addAll(num)">批量添加</el-button>
+    </el-col>
+    </el-form>
+
+    <el-table :data="UserData" style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55"></el-table-column>
+      <el-table-column label="用户名" prop="account"></el-table-column>
+      <el-table-column label="姓名" prop="name"></el-table-column>
+      <el-table-column label="性别" prop="sex"></el-table-column>
+      <el-table-column label="手机号" prop="telephone"></el-table-column>
+      <el-table-column label="是否可用">
+        <template slot-scope="scope">
+          <el-switch @change="setState(scope.row)" v-model="scope.row.state" active-color="#13ce66"
+            inactive-color="#ff4949" :active-value="1" :inactive-value="0"></el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="身份" prop="typeName">
+        <template slot-scope="scope">
+          <el-select @change="setType(scope.row)" v-model="scope.row.typeName" placeholder="scope.row.typeName">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button size="mini" type="danger" @click="delOne(scope.row.id)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <div class="pagination-container">
+      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange"
+        :current-page="searchForm.pageNum" :page-sizes="[10, 20, 50]" :page-size="searchForm.pageSize"
+        layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
-  
-      <el-dialog
-          title="提示"
-          :visible.sync="centerDialogVisible"
-          width="30%"
-          center>
-        <el-form ref="form" :rules="rules" :model="form" label-width="80px">
-          <el-form-item label="账号" prop="no">
-            <el-col :span="20">
-              <el-input v-model="form.no"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="名字" prop="name">
-            <el-col :span="20">
-              <el-input v-model="form.name"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-col :span="20">
-              <el-input v-model="form.password"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="年龄" prop="age">
-            <el-col :span="20">
-              <el-input v-model="form.age"></el-input>
-            </el-col>
-          </el-form-item>
-          <el-form-item label="性别">
-            <el-radio-group v-model="form.sex">
-              <el-radio label="1">男</el-radio>
-              <el-radio label="0">女</el-radio>
-            </el-radio-group>
-          </el-form-item>
-          <el-form-item label="电话" prop="phone">
-            <el-col :span="20">
-              <el-input v-model="form.phone"></el-input>
-            </el-col>
-          </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-         <el-button @click="centerDialogVisible = false">取 消</el-button>
-         <el-button type="primary" @click="save">确 定</el-button>
-        </span>
-      </el-dialog>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      let checkAge = (rule, value, callback) => {
-        if(value>150){
-          callback(new Error('年龄输入过大'));
-        }else{
-          callback();
-        }
-      };
-      let checkDuplicate = (rule, value, callback) => {
-        if(this.form.id){
-          return callback();
-        }
-        this.$axios.get(this.$httpUrl+"/user/findByNo?no="+this.form.no).then(res=>res.data).then(res=>{
-          if(res.code!=200){
-            callback();
-          }else{
-            callback(new Error('账号已经存在'));
-          }
-        })
-      };
-      return {
-        tableData: [{
-          name: '王小虎',
-          age: 18,
-          sex: '男',
-          phone: 12345678912,
-          mail: '123456@qq.com',
-          section: '研发部',
-          time: '2024年4月20日'
-        },{
-          name: '王小虎',
-          age: 18,
-          sex: '男',
-          phone: 12345678912,
-          mail: '123456@qq.com',
-          section: '研发部',
-          time: '2024年4月20日'
-        },{
-          name: '王小虎',
-          age: 18,
-          sex: '男',
-          phone: 12345678912,
-          mail: '123456@qq.com',
-          section: '研发部',
-          time: '2024年4月20日'
-        }],
-        pageSize:10,
-        pageNum:1,
-        total:0,
-        name:'',
-        sex:'',
-        sexs:[
-          {
-            value:'1',
-            label:'男'
-          },{
-            value:'0',
-            label:'女'
-          }
-        ],
-        centerDialogVisible:false,
-        form:{
-          id:'',
-          no:'',
-          name:'',
-          password:'',
-          age:'',
-          phone:'',
-          sex:'0',
-          roleId:'1'
-        },
-        rules: {
-          no: [
-            {required: true, message: '请输入账号', trigger: 'blur'},
-            {min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'},
-            {validator:checkDuplicate,trigger: 'blur'}
-          ],
-          name: [
-            {required: true, message: '请输入名字', trigger: 'blur'}
-          ],
-          password: [
-            {required: true, message: '请输入密码', trigger: 'blur'},
-            {min: 3, max: 8, message: '长度在 3 到 8 个字符', trigger: 'blur'}
-          ],
-          age: [
-            {required: true, message: '请输入年龄', trigger: 'blur'},
-            {min: 1, max: 3, message: '长度在 1 到 3 个位', trigger: 'blur'},
-            {pattern: /^([1-9][0-9]*){1,3}$/,message: '年龄必须为正整数字', trigger: 'blur'},
-            {validator:checkAge,trigger: 'blur'}
-          ],
-          phone: [
-            {required: true, message: '手机号不能为空', trigger: 'blur'},
-            {pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/, message: '请输入正确的手机号码', trigger: 'blur'}
-          ]
-        }
-      }
-    },
-    methods:{
-      resetForm(){
-        this.$refs.form.resetFields();
+
+  </div>
+</template>
+
+<script>
+import {  userPage, userDeleteByIds, userAddOrUpdate,userAdd } from "@/api/modules/user"
+import { getStore } from "@/utils/storage"
+export default {
+  data() {
+    return {
+      num:1,
+      visible: false,
+      total: 10,
+      searchForm: {
+        pageNum: 1,
+        pageSize: 10,
+        name: "",
       },
-      del(id){
-        console.log(id)
-        this.$axios.get(this.$httpUrl+'/user/del?id='+id).then(res=>res.data).then(res=>{
-          console.log(res)
-          if(res.code==200){
-            this.$message({
-              message: '操作成功！',
-              type: 'success'
-            });
-            this.loadPost()
-          }else{
-            this.$message({
-              message: '操作失败！',
-              type: 'error'
-            });
-          }
-        })
-      },
-      mod(row){
-        console.log(row)
-  
-        this.centerDialogVisible = true
-        this.$nextTick(()=>{
-          //赋值到表单
-          this.form.id = row.id
-          this.form.no = row.no
-          this.form.name = row.name
-          this.form.password = ''
-          this.form.age = row.age + ''
-          this.form.sex = row.sex + ''
-          this.form.phone = row.phone
-          this.form.roleId = row.roleId
-        })
-      },
-      add(){
-        this.centerDialogVisible = true
-        this.$nextTick(()=>{
-          this.resetForm()
-        })
-      },
-      doSave(){
-        this.$axios.post(this.$httpUrl+'/user/save',this.form).then(res=>res.data).then(res=>{
-          console.log(res)
-          if(res.code==200){
-            this.$message({
-              message: '操作成功！',
-              type: 'success'
-            });
-            this.centerDialogVisible = false
-            this.loadPost()
-            this.resetForm()
-          }else{
-            this.$message({
-              message: '操作失败！',
-              type: 'error'
-            });
-          }
-        })
-      },
-      doMod(){
-        this.$axios.post(this.$httpUrl+'/user/update',this.form).then(res=>res.data).then(res=>{
-          console.log(res)
-          if(res.code==200){
-            this.$message({
-              message: '操作成功！',
-              type: 'success'
-            });
-            this.centerDialogVisible = false
-            this.loadPost()
-            this.resetForm()
-          }else{
-            this.$message({
-              message: '操作失败！',
-              type: 'error'
-            });
-          }
-        })
-      },
-      save(){
-        this.$refs.form.validate((valid) => {
-          if (valid) {
-            if(this.form.id){
-              this.doMod();
-            }else{
-              this.doSave();
-            }
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        this.pageNum=1
-        this.pageSize=val
-        this.loadPost()
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.pageNum=val
-        this.loadPost()
-      },
-      loadGet(){
-        this.$axios.get(this.$httpUrl+'/user/list').then(res=>res.data).then(res=>{
-          console.log(res)
-        })
-      },
-      resetParam(){
-        this.name=''
-        this.sex=''
-      },
-      loadPost(){
-        this.$axios.post(this.$httpUrl+'/user/listPageC1',{
-          pageSize:this.pageSize,
-          pageNum:this.pageNum,
-          param:{
-            name:this.name,
-            sex:this.sex,
-            roleId:'1'
-          }
-        }).then(res=>res.data).then(res=>{
-          console.log(res)
-          if(res.code==200){
-            this.tableData=res.data
-            this.total=res.total
-          }else{
-            alert('获取数据失败')
-          }
-        })
-      }
-    },
-    beforeMount() {
-      this.loadPost()
+      UserData: [],
+      selectionIds: [],
+
+      options: [{
+        value: 2,
+        label: '施工经理'
+      }, {
+        value: 1,
+        label: '施工人员'
+      }, {
+        value: 0,
+        label: '管理员'
+      },],
     }
-  }
-  </script>
-  
-  <style scoped>
-  
-  </style>
+  },
+  mounted() {
+    this.loadUserData()
+  },
+  methods: {
+
+    setType(row) {
+      console.log(row.type)
+      console.log(row.item)
+      userAddOrUpdate({
+        id: row.id,
+        type: row.type
+      }).then(result => {
+        this.$message('状态更改成功')
+      }).catch(err => {
+        this.$message.error(err)
+      })
+    },
+
+    setState(row) {
+      userAddOrUpdate({
+        id: row.id,
+        state: row.state
+      }).then(result => {
+        this.$message('状态更改成功')
+      }).catch(err => {
+        this.$message.error(err)
+      })
+    },
+
+    edit(row) {
+      this.obj = row
+      this.title = row.username
+      this.visible = true;
+    },
+
+    // addAll(row){
+    //    for(let i=0;i<row;i++){
+    //     this.addOne();
+    //   }
+    // },
+    addAll(num){
+     //console.log(num)
+      userAdd({num:num}).then(result => {
+          this.$message('添加成功')
+          this.loadUserData()
+        }).catch(err => {
+          this.$message.error(err)
+        })
+    },
+    delOne(id) {
+      this.del(id)
+    },
+    delAll() {
+      if (this.selectionIds.length <= 0) {
+        this.$message.warning("先选择记录")
+        return
+      }
+      this.del(this.selectionIds.join(","))
+    },
+    del(ids) {
+      this.$confirm('确定删除该记录？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        userDeleteByIds({ ids: ids }).then(result => {
+          this.$message('删除成功')
+          this.loadUserData()
+        }).catch(err => {
+          this.$message.error(err)
+        })
+      }).catch(() => {
+        console.log("cancle")
+      });
+    },
+
+    search() {
+      this.loadUserData()
+    },
+
+    setText(state) {
+      let lst = state
+      lst.forEach(item => {
+        switch (item.type) {
+          case '0':
+            item.typeName = "管理员"
+            break
+          case '1':
+            item.typeName = "施工人员"
+            break
+          case '2':
+            item.typeName = "施工经理"
+            break
+          default:
+            console.error("Unhandled type:", item.type);
+        }
+      })
+      return lst
+    },
+
+    loadUserData() {
+      userPage({ ...this.searchForm })
+        .then(result => {
+          //this.UserData = result.data.records;
+          this.UserData = this.setText(result.data.records);
+          this.total = result.data.total;
+          //console.log(result.data.records)
+       //  console.log(this.UserData)
+        }).catch(err => {
+          console.log("error:" + err)
+        })
+    },
+    handleSizeChange(val) {
+      this.searchForm.pageSize = val;
+      this.loadUserData()
+      console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      this.searchForm.pageNum = val;
+      this.loadUserData()
+      console.log(`当前页: ${val}`);
+    },
+    handleSelectionChange(val) {
+      console.log(val)
+      this.selectionIds = [];
+      val.forEach(item => {
+        // console.log(item.id)
+        this.selectionIds.push(item.id)
+      })
+      console.log(this.selectionIds.join(","))
+    },
+
+  },
+}
+</script>
+
+
+<style scoped>
+.page-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.formItem {
+  margin-bottom: 20px;
+}
+
+/* Style for the delete button */
+.el-button--danger {
+  background-color: #f56c6c;
+  border-color: #f56c6c;
+}
+
+/* Style for the pagination container */
+.pagination-container {
+  margin-top: 20px;
+  text-align: center;
+}
+</style>

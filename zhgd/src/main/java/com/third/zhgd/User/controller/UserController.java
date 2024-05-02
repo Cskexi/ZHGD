@@ -17,6 +17,8 @@ import com.third.zhgd.User.service.UserService;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.third.zhgd.other.utils.JwtUtil.validateToken;
+
 
 /**
  * <p>
@@ -57,12 +59,21 @@ public class UserController {
     @ApiOperation(value = "用户登录接口")
     public Result register(@RequestBody User user) throws Exception {
         Result result = new Result();
-        if(userService.exit(user.getUsername())){
-            result.fail("用户名"+user.getUsername()+"已存在");
+        if(userService.exit(user.getAccount())){
+            result.fail("用户名"+user.getAccount()+"已存在");
             return result;
         }
         userService.register(user);
         result.success("注册成功");
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.POST,value="/add")
+    @ApiOperation(value = "添加新用户")
+    public Result add(Integer num) throws Exception {
+        Result result = new Result();
+        userService.add(num);
+        result.success("用户添加成功");
         return result;
     }
 
@@ -105,10 +116,20 @@ public class UserController {
         @ApiImplicitParam(name = "pageSize",required = true,paramType = "query",value = "每页记录数")
     })
     @RequestMapping(method = RequestMethod.POST,value = "/page")
-    public Result page( Integer pageNum,Integer pageSize ){
+    public Result page( Integer pageNum,Integer pageSize ,String name){
         Result result = new Result();
         result.success("分页获取成功");
-        result.setData(userService.page(pageNum,pageSize));
+        result.setData(userService.page(pageNum,pageSize,name));
+        return result;
+    }
+
+    @RequestMapping(method = RequestMethod.POST,value="/getByToken")
+    @ApiOperation(value = "用户登录接口")
+    public Result getByToken(String token) throws Exception {
+        Result result = validateToken(token);
+        String id = result.getData().toString();
+        result.setData(userService.getById(id));
+        result.success("通过");
         return result;
     }
 

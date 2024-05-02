@@ -1,6 +1,9 @@
 package com.third.zhgd.User.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.third.zhgd.DataMsg.entity.Datamsg;
+import com.third.zhgd.DataMsg.service.DatamsgService;
 import com.third.zhgd.User.dto.UserLoginDto;
 import com.third.zhgd.other.utils.ConstantsUtils;
 import com.third.zhgd.other.utils.DateTool;
@@ -12,12 +15,17 @@ import com.third.zhgd.User.mapper.UserMapper;
 import com.third.zhgd.User.entity.User;
 import com.third.zhgd.User.service.UserService;
 import com.third.zhgd.other.utils.MD5Util;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 /**
 * <p>
     * 用户表 服务层实现类
@@ -28,12 +36,13 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements UserService {
-
+    @Autowired
+    private DatamsgService datamsgService;
 
     @Override
     public User login(UserLoginDto userLoginDto) throws Exception{
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(User::getUsername,userLoginDto.getUsername());
+        queryWrapper.lambda().eq(User::getAccount,userLoginDto.getAccount());
         User userExit = this.getOne(queryWrapper);
         if(userExit !=null){
             if(userExit.getPassword().equals(MD5Util.getEncode(userLoginDto.getPassword(),userExit.getSalt()))){
@@ -48,16 +57,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         user.setCreateTime(DateTool.getCurrTime());
         String salt = UUID.randomUUID().toString();
         user.setSalt(salt);
-
         String pwdMd5 = MD5Util.getEncode(user.getPassword(),salt);
         user.setPassword(pwdMd5);
         this.save(user);
     }
 
     @Override
-    public boolean exit(String username) {
+    public void add(Integer num) throws Exception{
+        System.out.println(1);
+        for(int i=0;i<num;i++){
+            User user = new User();
+            Datamsg datamsg = datamsgService.getNum("user");
+            System.out.println(datamsg.getDataNum());
+            datamsg.setDataNum(datamsg.getDataNum()+1);
+            datamsgService.addOrUpdate(datamsg);
+            int a = 100000+datamsg.getDataNum();
+            user.setAccount(a+"");
+            user.setPassword("123456");
+            user.setCreateTime(DateTool.getCurrTime());
+            String salt = UUID.randomUUID().toString();
+            user.setSalt(salt);
+            String pwdMd5 = MD5Util.getEncode(user.getPassword(),salt);
+            user.setPassword(pwdMd5);
+            this.save(user);
+        }
+
+    }
+
+    @Override
+    public boolean exit(String account) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(User::getUsername,username);
+        queryWrapper.lambda().eq(User::getAccount,account);
         if(this.getOne(queryWrapper)!=null){
             return true;
         }
@@ -82,10 +112,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
     public void deleteByIds(String ids) {
         List<String> listIds = new ArrayList<>();
         String[] aryIds = ids.split(",");
-        for(String id: aryIds){
-            listIds.add(id);
+        for(String id :aryIds){
+            User user = this.getById(id);
+            user.setDelFlag(ConstantsUtils.GL_DEL);
+            this.updateById(user);
+
         }
-        this.removeByIds(listIds);
+//        for(String id: aryIds){
+//            listIds.add(id);
+//        }
+//        this.removeByIds(listIds);
     }
 
 
@@ -100,10 +136,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
 
     @Override
-    public Page<User> page(Integer pageNum,Integer pageSize) {
-        Page<User> page = new Page(pageNum,pageSize);
-
-        return this.page(page);
+    public Page<User> page(Integer pageNum,Integer pageSize,String name) {
+        Page<User> page =new Page<>(pageNum,pageSize);
+        LambdaQueryWrapper<User> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if(StringUtils.isNotBlank(name)){
+            lambdaQueryWrapper.like(User::getName,name);
+        }
+        lambdaQueryWrapper.eq(User::getDelFlag,ConstantsUtils.GL_NORMAL);
+        //lambdaQueryWrapper.orderByDesc(User::getCreateTime);
+        lambdaQueryWrapper.orderByDesc(User::getAccount);
+        return this.page(page,lambdaQueryWrapper);
     }
+
 
 }

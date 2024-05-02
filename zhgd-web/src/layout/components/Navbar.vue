@@ -1,6 +1,5 @@
 <template>
     <div>
-    导航栏
     <el-button type="primary" @click="logOut()">登 出</el-button>
     </div>
   </template>

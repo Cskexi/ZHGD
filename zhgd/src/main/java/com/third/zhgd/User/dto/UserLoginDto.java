@@ -10,7 +10,7 @@ import lombok.Data;
 @ApiModel(value = "User用户新增编辑实体信息",description = "用户新增编辑实体信息")
 public class UserLoginDto extends BaseEntity {
     @ApiModelProperty(value = "用户名")
-    private String username;
+    private String account;
     @ApiModelProperty(value = "密码")
     private String password;
 }

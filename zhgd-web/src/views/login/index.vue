@@ -16,6 +16,7 @@
 
 <script>
   import Cookies from "js-cookie"
+  import { login, getByToken } from "@/api/modules/user";
   import { setStore } from '@/utils/storage'
   export default {
     name: 'Login',
@@ -23,7 +24,7 @@
       return {
         logining: false,
         loginForm: {
-          account: 'admin',
+          account: '100016',
           password: '123456'
         },
         fieldRules: {
@@ -39,12 +40,26 @@
     },
     methods: {
       login() {
-         let userInfo = {account:this.loginForm.account, password:this.loginForm.password}
-        // this.$api.login(JSON.stringify(userInfo)).then((res) => {
-        //     Cookies.set('token', res.data.token) // 放置token到Cookie
-        //     sessionStorage.setItem('user', userInfo.account) // 保存用户到本地会话
-        setStore('user', userInfo.account)
+        login({
+        ...this.loginForm
+      }).then(result => {
+        let token = result.data;
+        setStore("token", token)
+        setStore('user', this.loginForm.account)
+        //this.loadUserData();
+        console.log("token:" + result.data)
         this.$router.push('/')  // 登录成功，跳转到主页
+      }).catch(err => {
+        console.log("error:" + err)
+        this.$message.error(err)
+      })
+        //  let userInfo = {account:this.loginForm.account, password:this.loginForm.password}
+        // // this.$api.login(JSON.stringify(userInfo)).then((res) => {
+        // //     Cookies.set('token', res.data.token) // 放置token到Cookie
+        // //     sessionStorage.setItem('user', userInfo.account) // 保存用户到本地会话
+
+        // setStore('token', userInfo.token)
+        // this.$router.push('/')  // 登录成功，跳转到主页
         //   }).catch(function(res) {
         //     alert(res);
         //   });

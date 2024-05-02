@@ -12,11 +12,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/register',
-    component: () => import('@/views/register/index'),
-    hidden: true
-  },
-  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -28,6 +23,10 @@ export const constantRoutes = [
       {
         path: 'permission',
         component: () => import('@/views/permission/index'),
+      },
+      {
+        path: 'userInfo',
+        component: () => import('@/views/userInfo/index'),
       }
     ]
   },

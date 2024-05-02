@@ -28,7 +28,7 @@ public class User extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "用户名")
-    private String username;
+    private String account;
 
     @ApiModelProperty(value = "密码")
     private String password;
@@ -44,6 +44,19 @@ public class User extends BaseEntity {
 
     @ApiModelProperty(value = "盐")
     private String salt;
+
+    @ApiModelProperty(value = "手机号码")
+    private String telephone;
+
+    @ApiModelProperty(value = "性别 1-男 0-女")
+    private String sex;
+
+    @ApiModelProperty(value = "角色 0-管理员 1-施工人员 2-施工经理 ")
+    private String type;
+
+    @ApiModelProperty(value = "姓名")
+    private String name;
+
 
 
 }
