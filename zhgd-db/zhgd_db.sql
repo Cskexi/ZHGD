@@ -11,11 +11,38 @@
  Target Server Version : 80034
  File Encoding         : 65001
 
- Date: 02/05/2024 15:31:13
+ Date: 05/05/2024 12:09:48
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for tb_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_apply`;
+CREATE TABLE `tb_apply`  (
+  `id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键UUID',
+  `type` tinyint(1) NULL DEFAULT NULL COMMENT '请假类型 0-病假 1-事假 2-年假 3-其他',
+  `end` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请假结束时间',
+  `start` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请假起始时间',
+  `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请假原因',
+  `state` tinyint(1) NULL DEFAULT NULL COMMENT '状态 0-待审核 1-审核通过 2-审核不通过',
+  `user_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户表ID',
+  `create_time` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间 YYYY-MM-DD hh:mm:ss',
+  `vet_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审核理由',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_apply
+-- ----------------------------
+INSERT INTO `tb_apply` VALUES ('50577465478b95fdb6fe17254c184464', 2, NULL, '2024-5-3 2024-5-3', '测试', 0, '0d4ca3a41361982c9b29e829b86f7930', '2024-05-03 13:03:21', NULL);
+INSERT INTO `tb_apply` VALUES ('6cf22b03cedeb3aee973a1f547a9c1e4', 0, '2024-06-12', '2024-05-01', '', 0, '23a749199411f739a7eb608848403696', '2024-05-03 13:35:04', NULL);
+INSERT INTO `tb_apply` VALUES ('d43aa8246d7f5a5395f29bccff90ec91', 0, NULL, NULL, '123', 0, '23a749199411f739a7eb608848403696', '2024-05-03 13:29:48', NULL);
+INSERT INTO `tb_apply` VALUES ('f5a5c0af7a2aa28bb08a091fedca2e63', 1, NULL, '2024-5-3 2024-5-3', '测试', 0, '0d4ca3a41361982c9b29e829b86f7930', '2024-05-03 13:02:36', NULL);
+INSERT INTO `tb_apply` VALUES ('f78a9d6b34405b7c1b2b87be8fcc0bd7', 0, NULL, NULL, '测试', 0, '0d4ca3a41361982c9b29e829b86f7930', '2024-05-03 13:02:12', NULL);
+INSERT INTO `tb_apply` VALUES ('fa942dca4b001306df8f10d500bfc1ee', 0, NULL, NULL, '111', 0, '', '2024-05-03 13:28:52', NULL);
 
 -- ----------------------------
 -- Table structure for tb_datamsg
