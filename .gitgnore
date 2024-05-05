@@ -1,7 +1,7 @@
 .DS_Store
 zhgd-web/node_modules
 zhgd-web/dist
-
+ZHGD/zhgd/src/main/resources/application.properties
 
 # local env files
 .env.local

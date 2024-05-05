@@ -37,7 +37,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST,value="/update")
     @ApiOperation(value = "用户登录接口")
-    public Result login(@RequestBody User user) throws Exception {
+    public Result update(@RequestBody User user) throws Exception {
         Result result = new Result();
         User temp = userService.getById(user.getId());
         if(user.getPassword().isEmpty()){
