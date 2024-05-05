@@ -18,9 +18,10 @@
       <el-submenu index="1">
         <template slot="title">考勤管理</template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">出勤人员统计</el-menu-item>
-          <el-menu-item index="1-1">请假申请</el-menu-item>
-          <el-menu-item index="1-2">请假单审核</el-menu-item>
+          <el-menu-item index="1-1"> <router-link to="/attendance">出勤人员统计</router-link></el-menu-item>
+          <el-menu-item index="1-1"><router-link to="/attendanceApply">请假申请</router-link></el-menu-item>
+          <el-menu-item index="1-2"><router-link to="/attendanceVet">请假单审核</router-link></el-menu-item>
+          <el-menu-item index="1-2"><router-link to="/myAttendance">我的申请</router-link></el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-submenu index="2">

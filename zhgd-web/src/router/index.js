@@ -27,6 +27,22 @@ export const constantRoutes = [
       {
         path: 'userInfo',
         component: () => import('@/views/userInfo/index'),
+      },
+      {
+        path: 'attendance',
+        component: () => import('@/views/attendance/index'),
+      },
+      {
+        path: 'attendanceApply',
+        component: () => import('@/views/attendance/apply'),
+      },
+      {
+        path: 'attendanceVet',
+        component: () => import('@/views/attendance/vet'),
+      },
+            {
+        path: 'myAttendance',
+        component: () => import('@/views/attendance/myAttendance'),
       }
     ]
   },
