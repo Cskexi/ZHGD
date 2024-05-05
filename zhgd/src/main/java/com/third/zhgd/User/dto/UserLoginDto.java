@@ -13,4 +13,6 @@ public class UserLoginDto extends BaseEntity {
     private String account;
     @ApiModelProperty(value = "密码")
     private String password;
+    @ApiModelProperty(value = "姓名")
+    private String name;
 }

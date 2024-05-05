@@ -48,6 +48,8 @@
         setStore('user', this.loginForm.account)
         //this.loadUserData();
         console.log("token:" + result.data)
+        console.log("user:" + this.loginForm.account)
+        localStorage.setItem("user", JSON.stringify(this.loginForm.account))
         this.$router.push('/')  // 登录成功，跳转到主页
       }).catch(err => {
         console.log("error:" + err)

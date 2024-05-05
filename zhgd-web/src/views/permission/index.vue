@@ -2,22 +2,23 @@
   <div>
     <!-- <h1 class="page-title">用户管理</h1> -->
     <el-form ref="searchForm" :model="searchForm" :inline="true" class="formItem" label-width="80px">
-      <el-col :xl="6" :md="8" :sm="24">
+      <el-col :xl="6" :md="8" :sm="24" style="margin-bottom: 20px;">
         <el-input placeholder="姓名" v-model="searchForm.name" clearable> </el-input>
       </el-col>
-      <el-col :xl="6 || 24" :md="8 || 24" :sm="24">
-      <el-button icon="el-icon-search" type="primary" @click="search">搜索</el-button>
-      <el-button type="primary" @click="delAll">批量删除</el-button>
+      <el-col :xl="6 || 24" :md="6" :sm="24" style="margin-right: 15px">
+      <el-button icon="el-icon-search" type="primary" style="margin-left: 15px;" @click="search">搜索</el-button>
+      <el-button type="primary" @click="delAll" >批量删除</el-button>
     </el-col>
-    <el-col :xl="3 || 24" :md="4 || 24" :sm="24">
+    <el-col :xl="3 || 24" :md="6" :sm="24" style="float:right">
       <el-input-number v-model="num" controls-position="right" :min="1" :max="100"></el-input-number>
+      <el-button type="primary" @click="addAll(num)" style="margin-left: 15px;">批量添加</el-button>
     </el-col>
-    <el-col :xl="4 || 24" :md="4 || 24" :sm="24">
-      <el-button type="primary" @click="addAll(num)">批量添加</el-button>
-    </el-col>
+    <!-- <el-col :xl="4 || 24" :md="4 || 24" :sm="24">
+      
+    </el-col> -->
     </el-form>
 
-    <el-table :data="UserData" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table :data="UserData" style="width: 100%;" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="用户名" prop="account"></el-table-column>
       <el-table-column label="姓名" prop="name"></el-table-column>
@@ -26,13 +27,13 @@
       <el-table-column label="是否可用">
         <template slot-scope="scope">
           <el-switch @change="setState(scope.row)" v-model="scope.row.state" active-color="#13ce66"
-            inactive-color="#ff4949" :active-value="1" :inactive-value="0"></el-switch>
+            inactive-color="#ff4949" :active-value="1" :inactive-value="0" style="margin-left: 10px"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="身份" prop="typeName">
         <template slot-scope="scope">
-          <el-select @change="setType(scope.row)" v-model="scope.row.typeName" placeholder="scope.row.typeName">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          <el-select @change="setType(scope.row)" v-model="scope.row.typeName" placeholder="scope.row.typeName" style="width: 105px;">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" style="width: 96px; height:40px">
             </el-option>
           </el-select>
         </template>

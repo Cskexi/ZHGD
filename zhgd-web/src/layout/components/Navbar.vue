@@ -1,7 +1,10 @@
 <template>
-    <div>
-    <el-button type="primary" @click="logOut()">登 出</el-button>
+    
+    <div style="margin-top: 10px; float:right; ">
+      <span style="margin-right: 10px;">{{user}}</span>
+      <el-button type="primary" @click="logOut()" >登 出</el-button>
     </div>
+    
   </template>
   
   <script>
@@ -9,6 +12,7 @@
   export default {
     data() {
       return {
+        user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
       };
     },
     methods: {
