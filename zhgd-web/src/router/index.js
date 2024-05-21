@@ -14,7 +14,6 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
     children: [
       {
         path: 'dashboard',
@@ -43,6 +42,14 @@ export const constantRoutes = [
             {
         path: 'myAttendance',
         component: () => import('@/views/attendance/myAttendance'),
+      },
+      {
+        path: 'monitor',
+        component: () => import('@/views/monitor/index'),
+      },
+      {
+        path: 'dictype',
+        component: () => import('@/views/dictype/index'),
       }
     ]
   },

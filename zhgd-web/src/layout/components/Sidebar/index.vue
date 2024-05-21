@@ -4,18 +4,18 @@
             <router-link to="/dashboard">首页</router-link>
     </el-menu-item>
     <el-menu-item index="1">
-            <router-link to="/dashboard">信息中心</router-link>
-    </el-menu-item>
-    <el-menu-item index="1">
             <router-link to="/permission">用户管理</router-link>
     </el-menu-item>
     <el-menu-item index="1">
-            <router-link to="/dashboard">现场监控</router-link>
+            <router-link to="/monitor">现场监控</router-link>
+    </el-menu-item>
+    <el-menu-item index="1">
+            <router-link to="/dictype">字典管理</router-link>
     </el-menu-item>
     <el-menu-item index="1">
             <router-link to="/userInfo">个人信息管理</router-link>
     </el-menu-item>
-      <el-submenu index="1">
+      <!-- <el-submenu index="1">
         <template slot="title">考勤管理</template>
         <el-menu-item-group>
           <el-menu-item index="1-1"> <router-link to="/attendance">出勤人员统计</router-link></el-menu-item>
@@ -30,7 +30,7 @@
           <el-menu-item index="2-1">项目管理</el-menu-item>
           <el-menu-item index="2-2">任务管理</el-menu-item>
         </el-menu-item-group>
-      </el-submenu>
+      </el-submenu> -->
     </el-menu>
   </template>
 

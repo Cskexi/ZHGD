@@ -42,12 +42,17 @@
 
       
     <el-table :data="myApply" style="width: 100%" @selection-change="handleSelectionChange">
-        <el-table-column label="申请人" prop="start"></el-table-column>
+        <el-table-column label="申请人" prop="userId"></el-table-column>
       <el-table-column label="起始时间" prop="start"></el-table-column>
       <el-table-column label="结束时间" prop="end"></el-table-column>
       <el-table-column label="请假类型" prop="typeName"></el-table-column>
       <el-table-column label="请假原因" prop="reason"></el-table-column>
       <el-table-column label="审核状态" prop="stateName"></el-table-column>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button size="mini" type="primary" @click=" edit">审核</el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <div class="pagination-container">
@@ -56,16 +61,25 @@
         layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
+    <addOrEdit v-if="visible" :defaultFormDate="obj" :title="title" :visible="visible" @close="closeFather"></addOrEdit>
     </div>
+
 </template>
 
 <script>
   import { applyMyPage } from "@/api/modules/apply"
   import { getByToken } from "@/api/modules/user"
   import { getStore } from "@/utils/storage"
+  import addOrEdit from "./AddOrEdit"
 export default {
+  components: { addOrEdit },
     data() {
       return {
+
+        visible: false,
+      obj: {},
+      title: "修改",
+
         total: 0,
     searchForm: {
         pageNum: 1,
@@ -83,6 +97,11 @@ export default {
     },
 
     methods:{
+      edit() {
+      this.obj = this.user;
+      this.title = "审核"
+      this.visible = true;
+    },
      setText(lst) {
       lst.forEach(item => {
         switch (item.type) {

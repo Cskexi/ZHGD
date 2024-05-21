@@ -22,7 +22,7 @@
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="用户名" prop="account"></el-table-column>
       <el-table-column label="姓名" prop="name"></el-table-column>
-      <el-table-column label="性别" prop="sex"></el-table-column>
+      <el-table-column label="性别" prop="sexName"></el-table-column>
       <el-table-column label="手机号" prop="telephone"></el-table-column>
       <el-table-column label="是否可用">
         <template slot-scope="scope">
@@ -180,6 +180,16 @@ export default {
             break
           default:
             console.error("Unhandled type:", item.type);
+          }
+        switch (item.sex) {
+          case "0":
+            item.sexName = "女"
+            break
+          case "1":
+            item.sexName = "男"
+            break
+          default:
+            console.error("Unhandled type:", item.type);
         }
       })
       return lst
@@ -192,7 +202,7 @@ export default {
           this.UserData = this.setText(result.data.records);
           this.total = result.data.total;
           //console.log(result.data.records)
-       //  console.log(this.UserData)
+         console.log(this.UserData)
         }).catch(err => {
           console.log("error:" + err)
         })
