@@ -11,38 +11,11 @@
  Target Server Version : 80034
  File Encoding         : 65001
 
- Date: 05/05/2024 12:09:48
+ Date: 21/05/2024 19:37:10
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for tb_apply
--- ----------------------------
-DROP TABLE IF EXISTS `tb_apply`;
-CREATE TABLE `tb_apply`  (
-  `id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键UUID',
-  `type` tinyint(1) NULL DEFAULT NULL COMMENT '请假类型 0-病假 1-事假 2-年假 3-其他',
-  `end` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请假结束时间',
-  `start` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请假起始时间',
-  `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '请假原因',
-  `state` tinyint(1) NULL DEFAULT NULL COMMENT '状态 0-待审核 1-审核通过 2-审核不通过',
-  `user_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户表ID',
-  `create_time` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间 YYYY-MM-DD hh:mm:ss',
-  `vet_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '审核理由',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of tb_apply
--- ----------------------------
-INSERT INTO `tb_apply` VALUES ('50577465478b95fdb6fe17254c184464', 2, NULL, '2024-5-3 2024-5-3', '测试', 0, '0d4ca3a41361982c9b29e829b86f7930', '2024-05-03 13:03:21', NULL);
-INSERT INTO `tb_apply` VALUES ('6cf22b03cedeb3aee973a1f547a9c1e4', 0, '2024-06-12', '2024-05-01', '', 0, '23a749199411f739a7eb608848403696', '2024-05-03 13:35:04', NULL);
-INSERT INTO `tb_apply` VALUES ('d43aa8246d7f5a5395f29bccff90ec91', 0, NULL, NULL, '123', 0, '23a749199411f739a7eb608848403696', '2024-05-03 13:29:48', NULL);
-INSERT INTO `tb_apply` VALUES ('f5a5c0af7a2aa28bb08a091fedca2e63', 1, NULL, '2024-5-3 2024-5-3', '测试', 0, '0d4ca3a41361982c9b29e829b86f7930', '2024-05-03 13:02:36', NULL);
-INSERT INTO `tb_apply` VALUES ('f78a9d6b34405b7c1b2b87be8fcc0bd7', 0, NULL, NULL, '测试', 0, '0d4ca3a41361982c9b29e829b86f7930', '2024-05-03 13:02:12', NULL);
-INSERT INTO `tb_apply` VALUES ('fa942dca4b001306df8f10d500bfc1ee', 0, NULL, NULL, '111', 0, '', '2024-05-03 13:28:52', NULL);
 
 -- ----------------------------
 -- Table structure for tb_datamsg
@@ -59,6 +32,117 @@ CREATE TABLE `tb_datamsg`  (
 -- Records of tb_datamsg
 -- ----------------------------
 INSERT INTO `tb_datamsg` VALUES ('user', 34, '144c666f8a769d0cb33695e473153713');
+
+-- ----------------------------
+-- Table structure for tb_dic
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_dic`;
+CREATE TABLE `tb_dic`  (
+  `id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键UUID',
+  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典类型名称',
+  `value` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字典类型值',
+  `create_time` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间 YYYY-MM-DD hh:mm:ss',
+  `del_flag` tinyint(1) NULL DEFAULT 1 COMMENT '是否删除 1-正常 0-已删除',
+  `dictype_id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '所属字典类型，关联tb_dictype表',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典表 ' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of tb_dic
+-- ----------------------------
+INSERT INTO `tb_dic` VALUES ('7e95e239a6105d333ac684302f2e74b3', '材料区', '材料区', '2024-05-14 22:48:26', 1, '4a68d2963351eaf9c92159eaf09c13e7');
+INSERT INTO `tb_dic` VALUES ('a2ec7ebcc5868976a5eb2a150141e3b4', '生活区', '生活区', '2024-05-14 22:49:58', 1, '4a68d2963351eaf9c92159eaf09c13e7');
+INSERT INTO `tb_dic` VALUES ('e49085dc3ae5789345e1bfdcfd689bda', '办公区', '办公区', '2024-05-14 22:49:46', 1, '4a68d2963351eaf9c92159eaf09c13e7');
+
+-- ----------------------------
+-- Table structure for tb_dictype
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_dictype`;
+CREATE TABLE `tb_dictype`  (
+  `id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键UUID',
+  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '字典类型名称',
+  `value` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '字典类型值',
+  `create_time` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间 YYYY-MM-DD hh:mm:ss',
+  `del_flag` tinyint(1) NULL DEFAULT 1 COMMENT '是否删除 1-正常 0-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '字典类型表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of tb_dictype
+-- ----------------------------
+INSERT INTO `tb_dictype` VALUES ('4a68d2963351eaf9c92159eaf09c13e7', '地区', 'address', '2024-05-14 22:37:42', 1);
+
+-- ----------------------------
+-- Table structure for tb_equipment
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_equipment`;
+CREATE TABLE `tb_equipment`  (
+  `id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键UUID',
+  `name` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名字',
+  `create_time` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间 YYYY-MM-DD hh:mm:ss',
+  `state` tinyint(1) NULL DEFAULT 1 COMMENT '状态 1-可用 0-不可用',
+  `del_flag` tinyint(1) NULL DEFAULT 1 COMMENT '是否删除 1-正常 0-已删除',
+  `cordon` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '警戒线',
+  `start` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '起始',
+  `end` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '终止',
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '设备地区',
+  `flats` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '单位',
+  `stream_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '地址',
+  `value` varchar(3) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '值',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of tb_equipment
+-- ----------------------------
+INSERT INTO `tb_equipment` VALUES ('3757c5a501282f49ed102c0daa537dc7', 't', '2024-05-21 16:22:02', 1, 1, '1', '-1', '2', '', '2', '1', '1');
+INSERT INTO `tb_equipment` VALUES ('6f7e0d35d4f2cd0802b97730f303b26e', '办公区温度', '2024-05-21 17:13:22', 1, 1, '30', '0', '40', '办公区', '°', '1', '16');
+
+-- ----------------------------
+-- Table structure for tb_monitor
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_monitor`;
+CREATE TABLE `tb_monitor`  (
+  `id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键UUID',
+  `stream_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '视频流地址',
+  `name` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '名字',
+  `address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '区域',
+  `state` tinyint(1) NULL DEFAULT 1 COMMENT '状态 1-可用 0-不可用',
+  `del_flag` tinyint(1) NULL DEFAULT 1 COMMENT '是否删除 1-正常 0-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_monitor
+-- ----------------------------
+INSERT INTO `tb_monitor` VALUES ('4ffd3de89fc20c2075879417b7fd01fc', 'http://your_stream_url/123', '1221', '生活区', 1, 0);
+INSERT INTO `tb_monitor` VALUES ('6bc313aff00fda7abae7a5460b0c101d', '11223', '1232', '办公区', 1, 0);
+INSERT INTO `tb_monitor` VALUES ('7b94014bc9b0bca46a77e2f7f20ca0ad', '4312', '12', NULL, 1, 0);
+INSERT INTO `tb_monitor` VALUES ('96cfa1604527b5901afb352c139fb378', '2', '2', NULL, 1, 0);
+INSERT INTO `tb_monitor` VALUES ('9c89976e36769ca249f80d1904409eee', '212121', '122121', '', 1, 0);
+INSERT INTO `tb_monitor` VALUES ('b51d0ae3e4e5f072ea187676f3e740f2', '123', '一号仓库', '材料区', 1, 1);
+INSERT INTO `tb_monitor` VALUES ('bbaf46e4f3e2c5b2ef64cadcc778100b', '1', '1', '', 1, 0);
+INSERT INTO `tb_monitor` VALUES ('ce94e2bdb0e341adfa97c36fc74659ff', '123', '一号宿舍', '生活区', 1, 1);
+INSERT INTO `tb_monitor` VALUES ('df6407b3a8350e122cf0b051e3cf8c89', '1', '1', '生活区', 1, 0);
+INSERT INTO `tb_monitor` VALUES ('ee928a6ca55b592eb1d5027ddf9505da', '123', '大厅', '办公区', 1, 1);
+INSERT INTO `tb_monitor` VALUES ('fe0b970b7f9733625a23426775da9dc5', '123', '二号仓库', '材料区', 1, 1);
+
+-- ----------------------------
+-- Table structure for tb_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_notice`;
+CREATE TABLE `tb_notice`  (
+  `id` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '主键UUID',
+  `time` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '发生时间',
+  `reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '通知说明',
+  `create_time` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '创建时间 YYYY-MM-DD hh:mm:ss',
+  `del_flag` tinyint(1) NULL DEFAULT 1 COMMENT '是否删除 1-正常 0-已删除',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_notice
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for tb_user
