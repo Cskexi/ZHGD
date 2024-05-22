@@ -1,7 +1,13 @@
 <template>
 <el-menu :default-openeds="['1', '2']">
   <el-menu-item index="1">
-            <router-link to="/dashboard">首页</router-link>
+            <router-link to="/home">首页</router-link>
+    </el-menu-item>
+  <el-menu-item index="1">
+            <router-link to="/dashboard">传感器设备</router-link>
+    </el-menu-item>
+    <el-menu-item index="1">
+            <router-link to="/message">信息管理</router-link>
     </el-menu-item>
     <el-menu-item index="1">
             <router-link to="/permission">用户管理</router-link>

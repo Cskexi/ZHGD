@@ -1,11 +1,11 @@
 import{postJson,post} from "@/api/axios"
 
 export function save(params){
-    return postJson('Equipment/save',params)
+    return postJson('Notice/save',params)
 }
 
 export function list(params){
-    return post('Equipment/list',params)
+    return post('Notice/list',params)
 }
 
 export function deleteByIds(params){

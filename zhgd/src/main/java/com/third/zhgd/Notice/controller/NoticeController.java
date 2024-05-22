@@ -33,14 +33,10 @@ public class NoticeController {
     @RequestMapping(method = RequestMethod.POST, value = "/save")
     public Result addOrUpdate(@RequestBody Notice notice) {
         Result result = new Result();
-
         //交给业务去处理，service
         noticeService.addOrUpdate(notice);
-
         return result;
     }
-
-
 
     @ApiOperation(value = "批量删除记录")
     @ApiImplicitParams({
@@ -57,10 +53,10 @@ public class NoticeController {
 
     @ApiOperation(value = "查询所有记录")
     @RequestMapping(method = RequestMethod.POST,value = "/list")
-    public Result list(){
+    public Result list(String state){
         Result result = new Result();
         result.success("获取list成功");
-        result.setData(noticeService.list());
+        result.setData(noticeService.list(state));
         return result;
     }
 

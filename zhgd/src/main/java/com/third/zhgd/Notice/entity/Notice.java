@@ -39,5 +39,10 @@ public class Notice extends BaseEntity {
     @ApiModelProperty(value = "是否删除 1-正常 0-已删除")
     private Integer delFlag;
 
+    @ApiModelProperty(value = "状态 1-已处理 0-未处理")
+    private Integer state;
+
+    @ApiModelProperty(value = "设备id")
+    private String equipmentId;
 
 }

@@ -48,12 +48,14 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper,Equipment>
 
     @Override
     public void deleteByIds(String ids) {
-        List<String> listIds = new ArrayList<>();
+
         String[] aryIds = ids.split(",");
-        for(String id: aryIds){
-            listIds.add(id);
+        for(String id :aryIds){
+            Equipment monitor = this.getById(id);
+            monitor.setDelFlag(ConstantsUtils.GL_DEL);
+            this.updateById(monitor);
+
         }
-        this.removeByIds(listIds);
     }
 
 

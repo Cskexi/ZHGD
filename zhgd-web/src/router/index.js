@@ -14,7 +14,16 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
+    redirect: '/home',
     children: [
+      {
+        path: 'home',
+        component: () => import('@/views/home/index'),
+      },
+      {
+        path: 'message',
+        component: () => import('@/views/message/index'),
+      },
       {
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),

@@ -1,38 +1,47 @@
 <!-- src/components/MonitoringDashboard.vue -->
 <template>
     <div class="monitoring-dashboard">
-      <el-button type="primary" @click="addMonitor">新增</el-button>
+      <el-row>
+        <el-col :span="3">
+          <el-button type="primary" @click="addMonitor">新增</el-button>
+        </el-col>
+        <el-col :span="3">
+        <el-select v-model="form.address" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.name"
+      :value="item.value">
+    </el-option>
+  </el-select>
+      </el-col>
+      </el-row>
+
+      
       <el-row :gutter="20">
 
         <el-col :span="8" v-for="item in  equipmentData" :key="item.id">
           <el-card>
             <div class="monitoring-item">
               <h3>{{ item.name }}</h3>
-              <p class="value">{{ item.value }}{{ item.flats }}</p>
+              <p class="value" :style="getTextColor(item)">{{ item.value }}{{ item.flats }}</p>
             </div>
+            <el-button type="primary" @click="editMonitor(item)">编辑</el-button>
           </el-card>
         </el-col>
-
-        <!-- <el-col :span="8" v-for="item in monitoringData" :key="item.title">
-          <el-card>
-            <div class="monitoring-item">
-              <h3>{{ item.title }}</h3>
-              <p class="value">{{ item.value }}</p>
-            </div>
-          </el-card>
-        </el-col> -->
     
       </el-row>
-
-
 
       <addOrEdit v-if="visible" :defaultFormDate="obj" :title="title" :visible="visible" @close="closeFather"></addOrEdit>
     </div>
   </template>
   
   <script>
+    import { save } from "@/api/modules/notice"
     import addOrEdit from "./components/AddOrEdit"
     import { list,dataChange } from "@/api/modules/equipment"
+    import { dictypeList } from "@/api/modules/dictype"
+    import { dicPage } from "@/api/modules/dic"
   export default {
     components: {
       addOrEdit
@@ -47,32 +56,65 @@
           address:""
         },
         equipmentData:[],
-        monitoringData: [
-          { title: '温度', value: 25 },
-          { title: '湿度', value: 60 },
-          { title: '粉尘', value: 10 },
-          { title: '噪音', value: 70 },
-          { title: '空气质量', value: '优' },
-          { title: '光照强度', value: 500 },
-        ],
         timer: null,
+
+        options:[],
+        searchForm:{
+            pageNum:1,
+            pageSize:10,
+            dictypeId:"",
+        },
+        noticeForm: {
+          reason:"",
+          equipmentId:"",
+        },
       };
     },
     mounted() {
-      this.timer = setInterval(() => this.fetchVideos(), 1000); // 每5秒更新一次数据
+      this.loadOptions()
+      this.timer = setInterval(() => this.fetchVideos(), 5000); // 每5秒更新一次数据
       this.fetchVideos()
     },
     beforeDestroy() {
       clearInterval(this.timer);
     },
     methods: {
-      test(){
-        
-      console.log(1)
 
+      getTextColor(item) {
+    // 假设你希望当item.value大于100时字体颜色为红色
+    if(parseInt(item.value)>=parseInt(item.cordon))
+    return{ color: 'red' }
+      else{
+      return  { color: 'black' };
+  }
+  },
+      loadOptions(){
+          dictypeList({name:"地区"}).then(result => {
+          this. searchForm.dictypeId = result.data[0].id;
+          dicPage({
+        ...this.searchForm
+      }).then(result=>{
+        this.options=result.data.records;
+        this.options.push({
+            label:"全部",
+            name: "全部",
+            value:"",
+          });
+      }).catch(err=>{
+        console.log("error:"+err)
+      })
+
+        }).catch(err => {
+          console.log("error:" + err)
+        })
+        },
+    editMonitor(row) {
+      this.obj=row;
+      this.title = "编辑设备"
+      this.visible = true;
     },
       addMonitor() {
-      this.title = "添加新监控"
+      this.title = "添加新设备"
       this.visible = true;
       this.obj={};
     },
@@ -84,57 +126,31 @@
       }
     },
 
-
-    
     fetchVideos() {
         // 从后端获取视频数据，这里只是示例，实际情况需要根据后端API进行调整
         dataChange();
           list({...this.form}).then(result => {
           this.equipmentData = result.data;
-          console.log(this.equipmentData)
+          this.sendNotice(this.equipmentData);
         })
       },
 
+      sendNotice(a){
+  
+      a.forEach(item=>{
+        if(parseInt(item.value)>=parseInt(item.cordon)){
+          this.noticeForm.equipmentId=item.id;
+          this.noticeForm.reason="警告："+"当前"+item.name+"数值已达到"+item.value+item.flats;
+           save({...this.noticeForm}).then(result => {
+            console.log(this.noticeForm)
+         })
+        }
+      })
+    }
 
-
-      updateData() {
-        // 这里应该替换为从API获取的实际数据
-        this.monitoringData.forEach((item, index) => {
-          if (item.title === '温度') {
-            this.$set(this.monitoringData, index, { ...item, value: this.getRandomTemperature() });
-          } else if (item.title === '湿度') {
-            this.$set(this.monitoringData, index, { ...item, value: this.getRandomHumidity() });
-          } else if (item.title === '粉尘') {
-            this.$set(this.monitoringData, index, { ...item, value: this.getRandomDust() });
-          } else if (item.title === '噪音') {
-            this.$set(this.monitoringData, index, { ...item, value: this.getRandomNoise() });
-          } else if (item.title === '空气质量') {
-            const airQualities = ['优', '良', '轻度污染', '中度污染', '重度污染'];
-            this.$set(this.monitoringData, index, { ...item, value: airQualities[Math.floor(Math.random() * airQualities.length)] });
-          } else if (item.title === '光照强度') {
-            this.$set(this.monitoringData, index, { ...item, value: this.getRandomIllumination() });
-          } else if (item.title === '气象条件') {
-            const weatherConditions = ['晴朗', '多云', '阴天', '小雨', '大雨', '雷阵雨'];
-            this.$set(this.monitoringData, index, { ...item, value: weatherConditions[Math.floor(Math.random() * weatherConditions.length)] });
-          }
-        });
-      },
-      getRandomTemperature() {
-        return Math.floor(Math.random() * 30) + 10; // 随机生成10-40度的温度值
-      },
-      getRandomHumidity() {
-        return Math.floor(Math.random() * 50) + 10; // 随机生成10-60%的湿度值
-      },
-      getRandomDust() {
-        return Math.floor(Math.random() * 20); // 随机生成0-20的粉尘值
-      },
-      getRandomNoise() {
-        return Math.floor(Math.random() * 90) + 70; // 随机生成70-160分贝的噪音值
-      },
-      getRandomIllumination() {
-        return Math.floor(Math.random() * 500); // 随机生成0-500的光照强度值
-      },
     },
+
+   
   };
   </script>
   

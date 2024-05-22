@@ -7,11 +7,11 @@
           <app-main/>
         </div>    
     </div> -->
-    <el-container>
-  <el-aside width="200px"><Sidebar/></el-aside>
-  <el-container>
+    <el-container style="height: 100%; width: 100%;">
+  <el-aside width="200px" style="background-color: white;"><Sidebar/></el-aside>
+  <el-container >
     <el-header><Navbar/></el-header>
-    <el-main><app-main/></el-main>
+    <el-main style="height: 100%; width: 100%;"><app-main/></el-main>
   </el-container>
 </el-container>
 </template>

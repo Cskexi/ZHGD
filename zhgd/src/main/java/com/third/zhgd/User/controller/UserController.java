@@ -33,8 +33,6 @@ import static com.third.zhgd.other.utils.JwtUtil.validateToken;
 public class UserController {
     @Autowired
     private UserService userService;
-
-
     @RequestMapping(method = RequestMethod.POST,value="/update")
     @ApiOperation(value = "用户登录接口")
     public Result update(@RequestBody User user) throws Exception {

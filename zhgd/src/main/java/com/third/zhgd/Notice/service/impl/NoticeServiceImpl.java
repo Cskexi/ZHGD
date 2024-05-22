@@ -1,5 +1,8 @@
 package com.third.zhgd.Notice.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.third.zhgd.Equipment.entity.Equipment;
+import com.third.zhgd.other.utils.ConstantsUtils;
 import com.third.zhgd.other.utils.DateTool;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -28,6 +31,20 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper,Notice> implemen
         if(StringUtils.isBlank(notice.getId())){
             //add
             notice.setCreateTime(DateTool.getCurrTime());
+            if(StringUtils.isBlank(notice.getTime())){
+                notice.setTime(notice.getCreateTime());
+            }
+            if(StringUtils.isNotBlank(notice.getEquipmentId())){
+                QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
+                queryWrapper.lambda().eq(Notice::getDelFlag, ConstantsUtils.GL_NORMAL);
+                queryWrapper.lambda().eq(Notice::getEquipmentId, notice.getEquipmentId());
+                queryWrapper.lambda().eq(Notice::getState, 0);
+                List<Notice> list =this.list(queryWrapper);
+                System.out.println(list.size());
+                if(list.size()>0){
+                    return true;
+                }
+            }
             this.save(notice);
         }else{
             //update
@@ -48,8 +65,14 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper,Notice> implemen
 
 
     @Override
-    public List<Notice> list() {
-        return this.list();
+    public List<Notice> list( String state) {
+        QueryWrapper<Notice> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Notice::getDelFlag, ConstantsUtils.GL_NORMAL);
+        if(StringUtils.isNotBlank(state)){
+            queryWrapper.lambda().eq(Notice::getState, Integer.parseInt(state));
+        }
+        List<Notice> list =this.list(queryWrapper);
+        return list;
     }
 
 
