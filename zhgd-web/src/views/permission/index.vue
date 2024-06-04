@@ -6,14 +6,14 @@
         <el-input placeholder="姓名" v-model="searchForm.name" clearable> </el-input>
       </el-col>
       <el-col :xl="6 || 24" :md="6" :sm="24" style="margin-right: 15px">
-      <el-button icon="el-icon-search" type="primary" style="margin-left: 15px;" @click="search">搜索</el-button>
-      <el-button type="primary" @click="delAll" >批量删除</el-button>
-    </el-col>
-    <el-col :xl="3 || 24" :md="6" :sm="24" style="float:right">
-      <el-input-number v-model="num" controls-position="right" :min="1" :max="100"></el-input-number>
-      <el-button type="primary" @click="addAll(num)" style="margin-left: 15px;">批量添加</el-button>
-    </el-col>
-    <!-- <el-col :xl="4 || 24" :md="4 || 24" :sm="24">
+        <el-button icon="el-icon-search" type="primary" style="margin-left: 15px;" @click="search">搜索</el-button>
+        <el-button type="primary" @click="delAll">批量删除</el-button>
+      </el-col>
+      <el-col :xl="3 || 24" :md="6" :sm="24" style="float:right">
+        <el-input-number v-model="num" controls-position="right" :min="1" :max="100"></el-input-number>
+        <el-button type="primary" @click="addAll(num)" style="margin-left: 15px;">批量添加</el-button>
+      </el-col>
+      <!-- <el-col :xl="4 || 24" :md="4 || 24" :sm="24">
       
     </el-col> -->
     </el-form>
@@ -32,8 +32,10 @@
       </el-table-column>
       <el-table-column label="身份" prop="typeName">
         <template slot-scope="scope">
-          <el-select @change="setType(scope.row)" v-model="scope.row.typeName" placeholder="scope.row.typeName" style="width: 105px;">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" style="width: 96px; height:40px">
+          <el-select @change="setType(scope.row)" v-model="scope.row.typeName" placeholder="scope.row.typeName"
+            style="width: 105px;">
+            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"
+              style="width: 96px; height:40px">
             </el-option>
           </el-select>
         </template>
@@ -57,12 +59,12 @@
 </template>
 
 <script>
-import {  userPage, userDeleteByIds, userAddOrUpdate,userAdd } from "@/api/modules/user"
+import { userPage, userDeleteByIds, userAddOrUpdate, userAdd } from "@/api/modules/user"
 import { getStore } from "@/utils/storage"
 export default {
   data() {
     return {
-      num:1,
+      num: 1,
       visible: false,
       total: 10,
       searchForm: {
@@ -119,20 +121,13 @@ export default {
       this.title = row.username
       this.visible = true;
     },
-
-    // addAll(row){
-    //    for(let i=0;i<row;i++){
-    //     this.addOne();
-    //   }
-    // },
-    addAll(num){
-     //console.log(num)
-      userAdd({num:num}).then(result => {
-          this.$message('添加成功')
-          this.loadUserData()
-        }).catch(err => {
-          this.$message.error(err)
-        })
+    addAll(num) {
+      userAdd({ num: num }).then(result => {
+        this.$message('添加成功')
+        this.loadUserData()
+      }).catch(err => {
+        this.$message.error(err)
+      })
     },
     delOne(id) {
       this.del(id)
@@ -180,7 +175,7 @@ export default {
             break
           default:
             console.error("Unhandled type:", item.type);
-          }
+        }
         switch (item.sex) {
           case "0":
             item.sexName = "女"
@@ -202,7 +197,7 @@ export default {
           this.UserData = this.setText(result.data.records);
           this.total = result.data.total;
           //console.log(result.data.records)
-         console.log(this.UserData)
+          console.log(this.UserData)
         }).catch(err => {
           console.log("error:" + err)
         })

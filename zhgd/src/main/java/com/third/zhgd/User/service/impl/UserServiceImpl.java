@@ -68,11 +68,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
         for(int i=0;i<num;i++){
             User user = new User();
             Datamsg datamsg = datamsgService.getNum("user");
-            System.out.println(datamsg.getDataNum());
             datamsg.setDataNum(datamsg.getDataNum()+1);
             datamsgService.addOrUpdate(datamsg);
             int a = 100000+datamsg.getDataNum();
             user.setAccount(a+"");
+            user.setName("用户"+a);
             user.setPassword("123456");
             user.setCreateTime(DateTool.getCurrTime());
             String salt = UUID.randomUUID().toString();

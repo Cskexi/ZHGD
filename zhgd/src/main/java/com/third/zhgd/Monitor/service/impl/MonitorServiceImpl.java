@@ -57,7 +57,6 @@ public class MonitorServiceImpl extends ServiceImpl<MonitorMapper,Monitor> imple
         queryWrapper.lambda().eq(Monitor::getDelFlag, ConstantsUtils.GL_NORMAL);
         if(StringUtils.isNotBlank(name)){
             queryWrapper.lambda().like(Monitor::getName,name);
-            System.out.println(1);
         }
         if(StringUtils.isNotBlank(address)){
             queryWrapper.lambda().like(Monitor::getAddress,address);

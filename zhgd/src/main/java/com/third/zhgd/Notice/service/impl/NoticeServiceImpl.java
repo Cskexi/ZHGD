@@ -1,7 +1,9 @@
 package com.third.zhgd.Notice.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.third.zhgd.Equipment.entity.Equipment;
+import com.third.zhgd.User.entity.User;
 import com.third.zhgd.other.utils.ConstantsUtils;
 import com.third.zhgd.other.utils.DateTool;
 
@@ -71,16 +73,23 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper,Notice> implemen
         if(StringUtils.isNotBlank(state)){
             queryWrapper.lambda().eq(Notice::getState, Integer.parseInt(state));
         }
+        queryWrapper.lambda().orderByDesc(Notice::getTime);
         List<Notice> list =this.list(queryWrapper);
         return list;
     }
 
 
     @Override
-    public Page<Notice> page(Integer pageNum,Integer pageSize) {
+    public Page<Notice> page(Integer pageNum,Integer pageSize,String state) {
         Page<Notice> page = new Page(pageNum,pageSize);
+        LambdaQueryWrapper<Notice> lambdaQueryWrapper = new LambdaQueryWrapper<>();
 
-        return this.page(page);
+        if(StringUtils.isNotBlank(state)){
+            lambdaQueryWrapper.like(Notice::getState, Integer.parseInt(state));
+        }
+        lambdaQueryWrapper.eq(Notice::getDelFlag,ConstantsUtils.GL_NORMAL);
+        lambdaQueryWrapper.orderByDesc(Notice::getTime);
+        return this.page(page,lambdaQueryWrapper);
     }
 
 }

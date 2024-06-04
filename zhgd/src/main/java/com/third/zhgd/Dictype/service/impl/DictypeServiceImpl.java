@@ -53,7 +53,6 @@ public class DictypeServiceImpl extends ServiceImpl<DictypeMapper,Dictype> imple
     @Override
     public List<Dictype> list(String name)
     {
-        System.out.println("1"+name);
         QueryWrapper<Dictype> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Dictype::getDelFlag, ConstantsUtils.GL_NORMAL);
         queryWrapper.lambda().orderByDesc(Dictype::getCreateTime);
@@ -78,7 +77,5 @@ public class DictypeServiceImpl extends ServiceImpl<DictypeMapper,Dictype> imple
         Page<Dictype> page = new Page<>(pageNum, pageSize);
         return baseMapper.getPageByUsername(page,name);
     }
-
-
 
 }

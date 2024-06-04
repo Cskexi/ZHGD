@@ -20,6 +20,6 @@ public interface NoticeService extends IService<Notice> {
     Boolean addOrUpdate(Notice notice);
     void deleteByIds(String ids);
     List<Notice> list(String state);
-    Page<Notice> page(Integer pageNum,Integer pageSize);
+    Page<Notice> page(Integer pageNum,Integer pageSize,String state);
 
 }

@@ -66,10 +66,10 @@ public class NoticeController {
         @ApiImplicitParam(name = "pageSize",required = true,paramType = "query",value = "每页记录数")
     })
     @RequestMapping(method = RequestMethod.POST,value = "/page")
-    public Result page( Integer pageNum,Integer pageSize ){
+    public Result page( Integer pageNum,Integer pageSize,String state){
         Result result = new Result();
         result.success("分页获取成功");
-        result.setData(noticeService.page(pageNum,pageSize));
+        result.setData(noticeService.page(pageNum,pageSize,state));
         return result;
     }
 

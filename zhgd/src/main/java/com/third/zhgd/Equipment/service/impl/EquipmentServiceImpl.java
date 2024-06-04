@@ -99,7 +99,7 @@ public class EquipmentServiceImpl extends ServiceImpl<EquipmentMapper,Equipment>
             equipment.setValue(""+randomValue);
             this.updateById(equipment);
         }
-             return list.size();
+        return list.size();
     }
 
 }

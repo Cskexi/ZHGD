@@ -64,7 +64,6 @@ public class DicServiceImpl extends ServiceImpl<DicMapper,Dic> implements DicSer
     @Override
     public Page<Dic> page(Integer pageNum, Integer pageSize, String name,String dictypeId) {
         Page<Dic> page = new Page<>(pageNum, pageSize);
-
         LambdaQueryWrapper<Dic> lambdaQueryWrapper = new LambdaQueryWrapper<>();
         if (StringUtils.isNotBlank(name)) {
             lambdaQueryWrapper.like(Dic::getName, name);

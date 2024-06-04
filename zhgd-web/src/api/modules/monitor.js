@@ -1,13 +1,13 @@
-import{postJson,post} from "@/api/axios"
+import { postJson, post } from "@/api/axios"
 
-export function save(params){
-    return postJson('Monitor/save',params)
+export function save(params) {
+    return postJson('Monitor/save', params)
 }
 
-export function list(params){
-    return post('Monitor/list',params)
+export function monitorList(params) {
+    return post('Monitor/list', params)
 }
 
-export function deleteByIds(params){
-    return post('Monitor/deleteByIds',params)
+export function deleteByIds(params) {
+    return post('Monitor/deleteByIds', params)
 }
