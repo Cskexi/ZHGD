@@ -10,7 +10,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="视频地址" prop="streamUrl">
+      <el-form-item label="设备地址" prop="streamUrl">
         <el-input v-model="form.streamUrl" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="单位" prop="flats">

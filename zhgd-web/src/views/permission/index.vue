@@ -24,12 +24,12 @@
       <el-table-column label="姓名" prop="name"></el-table-column>
       <el-table-column label="性别" prop="sexName"></el-table-column>
       <el-table-column label="手机号" prop="telephone"></el-table-column>
-      <el-table-column label="是否可用">
+      <!-- <el-table-column label="是否可用">
         <template slot-scope="scope">
           <el-switch @change="setState(scope.row)" v-model="scope.row.state" active-color="#13ce66"
             inactive-color="#ff4949" :active-value="1" :inactive-value="0" style="margin-left: 10px"></el-switch>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="身份" prop="typeName">
         <template slot-scope="scope">
           <el-select @change="setType(scope.row)" v-model="scope.row.typeName" placeholder="scope.row.typeName"
@@ -77,7 +77,7 @@ export default {
 
       options: [{
         value: 2,
-        label: '施工经理'
+        label: '监测人员'
       }, {
         value: 1,
         label: '施工人员'
@@ -93,12 +93,14 @@ export default {
   methods: {
 
     setType(row) {
-      console.log(row.type)
-      console.log(row.item)
+      console.log(row.typeName)
+      console.log(row.id)
+      console.log(1)
       userAddOrUpdate({
         id: row.id,
-        type: row.type
+        type: row.typeName
       }).then(result => {
+        console.log(result)
         this.$message('状态更改成功')
       }).catch(err => {
         this.$message.error(err)

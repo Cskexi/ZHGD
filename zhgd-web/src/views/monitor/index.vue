@@ -4,7 +4,9 @@
       <el-col :span="3">
         <!-- 新增按钮 -->
         <el-button type="primary" @click="addMonitor">新增</el-button>
-
+        <!-- <video width="320" height="240" controls>
+          <source src="@/assets/test.mp4">
+        </video> -->
       </el-col>
       <el-col :span="3">
         <el-select v-model="lan2" placeholder="请选择">

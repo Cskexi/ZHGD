@@ -7,7 +7,7 @@
           <app-main/>
         </div>    
     </div> -->
-  <el-container style="height: 100%; width: 100%;">
+  <el-container style="height: 1200px; width: 100%;">
     <el-aside width="200px" style="background-color: white;">
       <Sidebar />
     </el-aside>
@@ -15,7 +15,7 @@
       <el-header>
         <Navbar />
       </el-header>
-      <el-main style="height: 1200px; width: 100%;"><app-main /></el-main>
+      <el-main style=" width: 100%;"><app-main /></el-main>
     </el-container>
   </el-container>
 </template>

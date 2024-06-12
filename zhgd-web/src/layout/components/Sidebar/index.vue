@@ -1,27 +1,30 @@
 <template>
-<el-menu :default-openeds="['1', '2']">
-  <el-menu-item index="1">
-            <router-link to="/home">首页</router-link>
-    </el-menu-item>
-  <el-menu-item index="1">
-            <router-link to="/dashboard">传感器设备</router-link>
+  <el-menu :default-openeds="['1', '2']">
+    <el-menu-item index="1">
+      <router-link to="/home">首页</router-link>
     </el-menu-item>
     <el-menu-item index="1">
-            <router-link to="/message">信息管理</router-link>
+      <router-link to="/dashboard">传感器设备</router-link>
     </el-menu-item>
     <el-menu-item index="1">
-            <router-link to="/permission">用户管理</router-link>
+      <router-link to="/message">信息管理</router-link>
     </el-menu-item>
     <el-menu-item index="1">
-            <router-link to="/monitor">现场监控</router-link>
+      <router-link to="/permission">用户管理</router-link>
     </el-menu-item>
     <el-menu-item index="1">
-            <router-link to="/dictype">字典管理</router-link>
+      <router-link to="/monitor">现场监控</router-link>
     </el-menu-item>
     <el-menu-item index="1">
-            <router-link to="/userInfo">个人信息管理</router-link>
+      <router-link to="/dictype">字典管理</router-link>
     </el-menu-item>
-      <!-- <el-submenu index="1">
+    <el-menu-item index="1">
+      <router-link to="/userInfo">个人信息管理</router-link>
+    </el-menu-item>
+    <el-menu-item index="1">
+      <router-link to="/help">操作指南</router-link>
+    </el-menu-item>
+    <!-- <el-submenu index="1">
         <template slot="title">考勤管理</template>
         <el-menu-item-group>
           <el-menu-item index="1-1"> <router-link to="/attendance">出勤人员统计</router-link></el-menu-item>
@@ -37,14 +40,14 @@
           <el-menu-item index="2-2">任务管理</el-menu-item>
         </el-menu-item-group>
       </el-submenu> -->
-    </el-menu>
-  </template>
+  </el-menu>
+</template>
 
-  <script>
+<script>
 
 
-export default{
-  
-   
+export default {
+
+
 }
 </script>

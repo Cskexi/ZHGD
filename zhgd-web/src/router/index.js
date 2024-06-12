@@ -17,6 +17,10 @@ export const constantRoutes = [
     redirect: '/home',
     children: [
       {
+        path: 'help',
+        component: () => import('@/views/help/index'),
+      },
+      {
         path: 'home',
         component: () => import('@/views/home/index'),
       },
@@ -48,7 +52,7 @@ export const constantRoutes = [
         path: 'attendanceVet',
         component: () => import('@/views/attendance/vet'),
       },
-            {
+      {
         path: 'myAttendance',
         component: () => import('@/views/attendance/myAttendance'),
       },
@@ -67,32 +71,32 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404'),
     hidden: true
   },
-  
+
 ]
 
-  const createRouter = () => new Router({
-    routes:constantRoutes
-  })
+const createRouter = () => new Router({
+  routes: constantRoutes
+})
 
-  const router = createRouter()
+const router = createRouter()
 
-  router.beforeEach((to,form,next)=>{
-    //let user = sessionStorage.getItem('user');
-    let user = getStore('user');
-    console.log(user)
-    if(to.path=='/login'|to.path=='/register'){
-      if(user){
-        next=({path:'/'})
-      }else{
-        next()
-      }
-    }else{
-      if(!user){
-        next({path:'/login'})
-      }else{
-        next()
-      }
+router.beforeEach((to, form, next) => {
+  //let user = sessionStorage.getItem('user');
+  let user = getStore('user');
+  console.log(user)
+  if (to.path == '/login' | to.path == '/register') {
+    if (user) {
+      next = ({ path: '/' })
+    } else {
+      next()
     }
-  })
+  } else {
+    if (!user) {
+      next({ path: '/login' })
+    } else {
+      next()
+    }
+  }
+})
 
 export default router

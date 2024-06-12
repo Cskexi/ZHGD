@@ -95,8 +95,8 @@ public class UserController {
         Result result = new Result();
 
         //交给业务去处理，service
-        userService.addOrUpdate(user);
-
+        //userService.addOrUpdate(user);
+        userService.updateById(user);
         return result;
     }
 
