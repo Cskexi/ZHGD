@@ -8,7 +8,7 @@
 <script>
 import { getByToken, update } from "@/api/modules/user"
 import { removeStore } from '@/utils/storage'
-import { getStore } from "@/utils/storage"
+import { getStore, setStore } from "@/utils/storage"
 export default {
   data() {
     return {
@@ -30,6 +30,7 @@ export default {
         console.log(token)
         getByToken({ token: token }).then(result => {
           this.user = result.data
+          setStore('userType', this.user.type)
           console.log(this.user)
         }).catch(err => {
           console.log("error:" + err)

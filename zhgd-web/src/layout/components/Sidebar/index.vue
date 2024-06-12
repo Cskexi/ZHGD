@@ -9,7 +9,7 @@
     <el-menu-item index="1">
       <router-link to="/message">信息管理</router-link>
     </el-menu-item>
-    <el-menu-item index="1">
+    <el-menu-item index="2" v-if="user.type == 0">
       <router-link to="/permission">用户管理</router-link>
     </el-menu-item>
     <el-menu-item index="1">
@@ -45,9 +45,40 @@
 
 <script>
 
-
+import { getStore, setStore } from "@/utils/storage"
+import { getByToken, update } from "@/api/modules/user"
+import { removeStore } from '@/utils/storage'
 export default {
 
+  data() {
+    return {
+      // user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
+      user: {}
+    };
+  },
+  mounted() {
+    this.loadUserData()
+  },
+  methods: {
+    logOut() {
+      removeStore('user')
+      this.$router.push('/login')  // 登录成功，跳转到主页
+    },
+    loadUserData() {
+      let token = getStore("token")
+      if (token) {
+        console.log(token)
+        getByToken({ token: token }).then(result => {
+          this.user = result.data
+        }).catch(err => {
+          console.log("error:" + err)
+        })
+      }
+      else {
+        console.log("token为空")
+      }
+    },
+  }
 
 }
 </script>
